@@ -1,10 +1,16 @@
-include(CheckCXXCompilerFlag)
+include(CheckCSourceCompiles)
 
-if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-    set(SUPPORT_NEON ON)
-endif ()
+# Check if NEON is supported by compiling a test program
+check_c_source_compiles("
+    #include <arm_neon.h>
+    int main() {
+        float32x4_t a = vdupq_n_f32(0.0f);
+        return 0;
+    }
+" SUPPORT_NEON)
 
-# Check if the Visual Studio build is targeting ARM
-if (CMAKE_GENERATOR_PLATFORM MATCHES "ARM64" OR CMAKE_GENERATOR_PLATFORM MATCHES "ARM")
-    set(SUPPORT_NEON ON)
-endif ()
+if(SUPPORT_NEON)
+    message(STATUS "NEON support enabled")
+else()
+    message(STATUS "NEON not supported")
+endif()
