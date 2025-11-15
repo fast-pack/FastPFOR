@@ -173,6 +173,8 @@ if(FASTPFOR_WITH_TEST)
     unittest/test_composite.cpp
     unittest/test_driver.cpp
     unittest/test_fastpfor.cpp
+    unittest/test_simple8b.cpp
+    unittest/test_simple16.cpp
     unittest/test_variablebyte.cpp)
   target_link_libraries(FastPFOR_unittest gtest FastPFOR)
   enable_testing()

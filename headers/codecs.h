@@ -53,6 +53,10 @@ public:
    * of the variable nvalue gets updated with the number actually use
    * (if nvalue exceeds the original value, there might be a buffer
    * overrun).
+   *
+   * NOTE: Decoding can be performed with an unknown input length. This
+   * case is indicated by a length of 0; however, nvalue must be provided
+   * in order for the decoder knows how many values to decode.
    */
   virtual const uint32_t *decodeArray(const uint32_t *in, const size_t length,
                                       uint32_t *out, size_t &nvalue) = 0;

@@ -745,7 +745,7 @@ const uint32_t *Simple16<MarkLength>::decodeArray(const uint32_t *in,
     printf("simple16 stats[%u]=%f\n", k, stats[k] * 1.0 / sum);
   }
 #endif
-  ASSERT(in <= endin, std::to_string(in - endin));
+  ASSERT(len == 0 || in <= endin, std::to_string(in - endin));
   return in;
 }
 
