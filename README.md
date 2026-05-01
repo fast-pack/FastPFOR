@@ -43,7 +43,7 @@ with SIMD instructions, but many that do compress very well.
 ## Security
 
 It is a low-level library. The inputs are not validated prior to decoding. It is assumed that the provided buffers were generated 
-by the corresponding encoding functions. It is your responsability to ensure the validity of your data. In production systems,
+by the corresponding encoding functions. It is your responsibility to ensure the validity of your data. In production systems,
 the use a strong hashing function to check for data integrity is recommended. The library does not provide this functionality.
 
 ## Working with sorted lists of integers
