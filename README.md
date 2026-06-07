@@ -1,7 +1,7 @@
 # FastPFor website (gh-pages)
 
 This branch holds **only** the source of the project website published at
-<https://fast-pack.github.io/FastPFor/>.
+<https://fast-pack.github.io/FastPFOR/>.
 
 It is a plain static site — no build step, no Jekyll (note the `.nojekyll` file).
 
@@ -21,4 +21,4 @@ python3 -m http.server 8000   # then visit http://localhost:8000
 
 Every push to this branch redeploys the site via GitHub Actions.
 
-> The library source code lives on the [`master`](https://github.com/fast-pack/FastPFor/tree/master) branch.
+> The library source code lives on the [`master`](https://github.com/fast-pack/FastPFOR/tree/master) branch.
