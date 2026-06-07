@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FastPFor — Fast integer compression in C++</title>
+<meta name="description" content="FastPFor is a research C++ library of SIMD-accelerated integer compression schemes. It decodes billions of integers per second — over 15 GB/s — far faster than gzip, LZ4, or Snappy.">
+<meta name="author" content="Daniel Lemire and contributors">
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="FastPFor — Fast integer compression in C++">
+<meta property="og:description" content="SIMD-accelerated integer compression. Decode billions of integers per second (15 GB/s+) — far faster than gzip, LZ4 or Snappy.">
+<meta property="og:url" content="https://fast-pack.github.io/FastPFor/">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">⟪⟫</span>
+      <span class="brand-name">FastPFor</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#example">Example</a>
+      <a href="#install">Install</a>
+      <a href="#bindings">Bindings</a>
+      <a href="#papers">Papers</a>
+      <a class="nav-gh" href="https://github.com/fast-pack/FastPFor" target="_blank" rel="noopener">GitHub ★</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="eyebrow">C++ · SIMD · integer compression</p>
+      <h1>Decode <span class="grad">billions of integers</span><br>per second.</h1>
+      <p class="lede">
+        FastPFor is a research C++ library of SIMD-accelerated integer compression
+        schemes. On a typical x64 laptop it decompresses at over
+        <strong>15&nbsp;GB/s</strong> — that's <strong>4&nbsp;billion+ integers per second</strong>,
+        far faster than generic codecs like gzip, LZO, Snappy or LZ4.
+      </p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#install">Get started</a>
+        <a class="btn btn-ghost" href="https://github.com/fast-pack/FastPFor" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+      <div class="badges">
+        <img src="https://github.com/fast-pack/FastPFor/workflows/Ubuntu-CI/badge.svg" alt="Ubuntu CI status">
+        <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="Apache 2.0 license">
+        <img src="https://img.shields.io/badge/C%2B%2B-11-00599C.svg" alt="C++11">
+        <img src="https://img.shields.io/github/stars/fast-pack/FastPFor?style=flat&color=ffb000" alt="GitHub stars">
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-num">15+ <span>GB/s</span></div>
+      <div class="stat-label">Decompression throughput</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4B+ <span>int/s</span></div>
+      <div class="stat-label">Integers decoded per second</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">128 <span>ints</span></div>
+      <div class="stat-label">SIMD block size — no 1024 needed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4 <span>languages</span></div>
+      <div class="stat-label">Ports: Python, Java, C#, Go</div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="section">
+    <h2 class="section-title">Why FastPFor?</h2>
+    <p class="section-sub">A battle-tested library used in search engines, genomics tooling, and databases.</p>
+    <div class="cards">
+      <article class="card">
+        <div class="card-ico">⚡</div>
+        <h3>Vectorized speed</h3>
+        <p>Exploits SSE/SSE4 instructions to decode at <em>15&nbsp;GB/s+</em>. Schemes like <code>SIMDBinaryPacking</code> work over blocks of just 128 integers.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">🗜️</div>
+        <h3>Great compression</h3>
+        <p>SIMD doesn't mean weaker ratios. Many schemes both vectorize <em>and</em> compress very well for arrays where most integers are small.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">🧩</div>
+        <h3>Many codecs, one API</h3>
+        <p>FastPFOR, SIMD-BP, VarintGB, Simple9/16, VByte and more — all behind a single <code>IntegerCODEC</code> factory interface.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">🔬</div>
+        <h3>Research-grade</h3>
+        <p>Backs peer-reviewed papers and is used by Lucene-derived formats, GMAP/GSNAP, the zsearch engine, and code in DuckDB.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">🖥️</div>
+        <h3>Portable</h3>
+        <p>Builds with GCC, Clang, ICC and MSVC on Linux, macOS and Windows. ARM is supported through SIMDe.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">📦</div>
+        <h3>Easy to build</h3>
+        <p>Standard CMake. Installable with <code>make install</code>, with configurable portable / native SIMD modes.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- EXAMPLE -->
+  <section id="example" class="section section-dark">
+    <h2 class="section-title">Compress in a few lines</h2>
+    <p class="section-sub">Pick a codec, encode your array, decode it back. That's the whole story.</p>
+    <div class="code-wrap">
+<pre><code class="language-cpp">#include "headers/codecfactory.h"
+#include "headers/deltautil.h"
+
+using namespace FastPForLib;
+
+CODECFactory factory;
+// Pick a codec (e.g. "simdfastpfor256", "simdbinarypacking", "varintg8iu")
+IntegerCODEC &codec = *factory.getFromName("simdfastpfor256");
+
+std::vector&lt;uint32_t&gt; mydata(10000);
+for (uint32_t i = 0; i &lt; mydata.size(); i += 150) mydata[i] = i;
+
+// --- Encode -------------------------------------------------------------
+std::vector&lt;uint32_t&gt; compressed(mydata.size() + 1024); // allocate enough
+size_t compressedsize = compressed.size();
+codec.encodeArray(mydata.data(), mydata.size(),
+                  compressed.data(), compressedsize);
+compressed.resize(compressedsize);
+
+// --- Decode -------------------------------------------------------------
+std::vector&lt;uint32_t&gt; recovered(mydata.size());
+size_t recoveredsize = recovered.size();
+codec.decodeArray(compressed.data(), compressed.size(),
+                  recovered.data(), recoveredsize);
+recovered.resize(recoveredsize);
+
+assert(recovered == mydata); // round-trips exactly</code></pre>
+    </div>
+    <p class="code-note">
+      Working with <strong>sorted</strong> integers? Combine FastPFor with differential coding
+      (<code>Delta::deltaSIMD</code> / <code>Delta::inverseDeltaSIMD</code>) to compress the gaps instead.
+    </p>
+  </section>
+
+  <!-- INSTALL -->
+  <section id="install" class="section">
+    <h2 class="section-title">Install &amp; build</h2>
+    <p class="section-sub">You need a C++11 compiler and CMake. On most systems:</p>
+    <div class="code-wrap">
+<pre><code class="language-bash">git clone https://github.com/fast-pack/FastPFor.git
+cd FastPFor
+cmake -B build
+cmake --build build
+ctest --test-dir build          # run the unit tests</code></pre>
+    </div>
+    <p class="section-sub" style="margin-top:2rem">Run a quick benchmark:</p>
+    <div class="code-wrap">
+<pre><code class="language-bash">./build/codecs --clusterdynamic
+./build/codecs --uniformdynamic</code></pre>
+    </div>
+    <div class="callout">
+      <strong>Tip — SIMD modes.</strong> Build <code>portable</code> (default, SSE4.2 baseline, safe to distribute)
+      or <code>native</code> (<code>-march=native</code>, maximum speed on the build machine) via
+      <code>-DFASTPFOR_SIMD_MODE=portable|native</code>. On x64 your CPU needs SSSE3 (anything since ~2006).
+    </div>
+  </section>
+
+  <!-- BINDINGS -->
+  <section id="bindings" class="section section-dark">
+    <h2 class="section-title">Use it from your language</h2>
+    <p class="section-sub">FastPFor has been ported and wrapped across the ecosystem.</p>
+
+    <a class="binding-feature" href="https://github.com/searchivarius/PyFastPFor" target="_blank" rel="noopener">
+      <div class="binding-feature-ico">🐍</div>
+      <div class="binding-feature-body">
+        <h3>Python — PyFastPFor</h3>
+        <p>
+          Prefer Python? <strong>PyFastPFor</strong> gives you FastPFor's SIMD integer codecs
+          directly from Python, with the same speed under the hood. Ideal for search,
+          analytics and data-science pipelines.
+        </p>
+        <span class="binding-feature-link">github.com/searchivarius/PyFastPFor →</span>
+      </div>
+    </a>
+
+    <div class="bindings-grid">
+      <a class="binding" href="https://github.com/lemire/JavaFastPFOR" target="_blank" rel="noopener">
+        <span class="binding-lang">Java</span>
+        <span class="binding-repo">JavaFastPFOR</span>
+        <span class="binding-desc">Used by ClueWeb Tools</span>
+      </a>
+      <a class="binding" href="https://github.com/Genbox/CSharpFastPFOR" target="_blank" rel="noopener">
+        <span class="binding-lang">C#</span>
+        <span class="binding-repo">CSharpFastPFOR</span>
+        <span class="binding-desc">.NET integer compression</span>
+      </a>
+      <a class="binding" href="https://github.com/zhenjl/encoding" target="_blank" rel="noopener">
+        <span class="binding-lang">Go</span>
+        <span class="binding-repo">encoding</span>
+        <span class="binding-desc">Integer compression for Go</span>
+      </a>
+      <a class="binding" href="https://github.com/ronanh/intcomp" target="_blank" rel="noopener">
+        <span class="binding-lang">Go</span>
+        <span class="binding-repo">intcomp</span>
+        <span class="binding-desc">Fast integer compression</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- RELATED -->
+  <section class="section">
+    <h2 class="section-title">Related libraries</h2>
+    <p class="section-sub">Working with sorted lists, or want a lighter codec? These pair well with FastPFor.</p>
+    <div class="related">
+      <a href="https://github.com/lemire/SIMDCompressionAndIntersection" target="_blank" rel="noopener"><strong>SIMDCompressionAndIntersection</strong><span>Codecs tuned for sorted integers, plus SIMD set intersection.</span></a>
+      <a href="https://github.com/lemire/streamvbyte" target="_blank" rel="noopener"><strong>StreamVByte</strong><span>Fast integer compression in C using the Stream VByte codec.</span></a>
+      <a href="https://github.com/lemire/simdcomp" target="_blank" rel="noopener"><strong>simdcomp</strong><span>Simple C library for binary-packing lists of integers.</span></a>
+      <a href="https://github.com/lemire/FastDifferentialCoding" target="_blank" rel="noopener"><strong>FastDifferentialCoding</strong><span>SIMD computation of deltas and recovery from deltas.</span></a>
+      <a href="https://github.com/lemire/MaskedVByte" target="_blank" rel="noopener"><strong>MaskedVByte</strong><span>Fast decoder for VByte-compressed integers.</span></a>
+      <a href="https://github.com/lemire/dictionary" target="_blank" rel="noopener"><strong>dictionary</strong><span>High-performance dictionary coding.</span></a>
+    </div>
+  </section>
+
+  <!-- PAPERS -->
+  <section id="papers" class="section section-dark">
+    <h2 class="section-title">Papers &amp; references</h2>
+    <p class="section-sub">FastPFor is grounded in peer-reviewed research.</p>
+    <ul class="papers">
+      <li>
+        D. Lemire, N. Kurz, C. Rupp.
+        <strong>Stream VByte: Faster Byte-Oriented Integer Compression.</strong>
+        Information Processing Letters 130, 2018.
+        <a href="https://arxiv.org/abs/1709.08990" target="_blank" rel="noopener">arXiv:1709.08990</a>
+      </li>
+      <li>
+        D. Lemire, L. Boytsov.
+        <strong>Decoding billions of integers per second through vectorization.</strong>
+        Software: Practice &amp; Experience 45(1), 2015.
+        <a href="http://arxiv.org/abs/1209.2137" target="_blank" rel="noopener">arXiv:1209.2137</a>
+      </li>
+      <li>
+        D. Lemire, L. Boytsov, N. Kurz.
+        <strong>SIMD Compression and the Intersection of Sorted Integers.</strong>
+        Software: Practice &amp; Experience 46(6), 2016.
+        <a href="http://arxiv.org/abs/1401.6399" target="_blank" rel="noopener">arXiv:1401.6399</a>
+      </li>
+      <li>
+        W. X. Zhao, X. Zhang, D. Lemire, et al.
+        <strong>A General SIMD-based Approach to Accelerating Compression Algorithms.</strong>
+        ACM TOIS 33(3), 2015.
+        <a href="http://arxiv.org/abs/1502.01916" target="_blank" rel="noopener">arXiv:1502.01916</a>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <span class="brand"><span class="brand-mark" aria-hidden="true">⟪⟫</span><span class="brand-name">FastPFor</span></span>
+      <p>Fast integer compression in C++.<br>Licensed under Apache License 2.0.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Project</h4>
+      <a href="https://github.com/fast-pack/FastPFor" target="_blank" rel="noopener">GitHub repository</a>
+      <a href="https://github.com/fast-pack/FastPFor/issues" target="_blank" rel="noopener">Issue tracker</a>
+      <a href="https://github.com/fast-pack/FastPFor/blob/master/LICENSE" target="_blank" rel="noopener">License</a>
+    </div>
+    <div class="footer-col">
+      <h4>Bindings</h4>
+      <a href="https://github.com/searchivarius/PyFastPFor" target="_blank" rel="noopener">Python · PyFastPFor</a>
+      <a href="https://github.com/lemire/JavaFastPFOR" target="_blank" rel="noopener">Java · JavaFastPFOR</a>
+      <a href="https://github.com/Genbox/CSharpFastPFOR" target="_blank" rel="noopener">C# · CSharpFastPFOR</a>
+    </div>
+  </div>
+  <p class="footer-bottom">
+    This work was supported by NSERC grant 26143. The author (D.&nbsp;Lemire) holds no patents on this library.
+  </p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
