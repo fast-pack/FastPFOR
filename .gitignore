@@ -13,3 +13,4 @@
 *.vcxproj.user
 /fastpfor.pc
 /FastPFORConfig.cmake
+/build
