@@ -8,6 +8,11 @@
 
 #include "common.h"
 
+#ifdef _WIN32
+#define NOMINMAX
+#define WINDOWS_LEAN_AND_MEAN
+#include <windows.h>
+
 namespace FastPForLib {
 
 //
@@ -18,11 +23,6 @@ namespace FastPForLib {
 // Implementation has been taken from a post on stackoverflow and adapted here
 // http://stackoverflow.com/questions/13263277/difference-between-stdsystem-clock-and-stdsteady-clock
 //
-#ifdef _WIN32
-#define NOMINMAX
-#define WINDOWS_LEAN_AND_MEAN
-#include <windows.h>
-
 struct qpc_clock {
   typedef std::chrono::nanoseconds duration;
   typedef duration::rep rep;
