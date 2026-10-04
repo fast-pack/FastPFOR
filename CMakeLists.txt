@@ -19,7 +19,7 @@ project(FastPFOR CXX C)
 set(PROJECT_URL "https://github.com/fast-pack/FastPFOR")
 set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 # Need to bump this when we release a new version.
-set(PROJECT_VERSION "0.5.0")
+set(PROJECT_VERSION "0.5.1")
 
 include(DetectCPUFeatures)
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/environment.cmake")
