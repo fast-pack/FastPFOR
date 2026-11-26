@@ -12,8 +12,11 @@
 #define NOMINMAX
 #define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 
 namespace FastPForLib {
+
+#ifdef _WIN32
 
 //
 // VS2012 bug: high_precision_clock is defined as system_clock and precision is
