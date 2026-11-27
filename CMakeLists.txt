@@ -194,7 +194,8 @@ if(FASTPFOR_WITH_TEST)
     unittest/test_fastpfor.cpp
     unittest/test_simple8b.cpp
     unittest/test_simple16.cpp
-    unittest/test_variablebyte.cpp)
+    unittest/test_variablebyte.cpp
+    unittest/test_vsencoding.cpp)
   target_link_libraries(FastPFOR_unittest gtest FastPFOR)
   enable_testing()
   add_test("FastPFOR_unittest" FastPFOR_unittest)

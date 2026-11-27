@@ -621,7 +621,13 @@ inline const uint32_t *VSEncodingBlocks::decodeVS(uint32_t len,
    */
   end = out + len;
 
-  do {
+  /*
+   * Each 32-bit word holds four block descriptors. Blocks of non-zero
+   * integers are copied 16 at a time and runs of zeros are cleared 32 at a
+   * time, so one word can write up to 4 * 32 integers. Only take this fast
+   * path while that fits before end.
+   */
+  while (end - out >= 4 * 32) {
     /* Permuting integers with a first 8-bit */
     B = (*addr) >> (VSEBLOCKS_LOGDESC * 3 + VSEBLOCKS_LOGLEN);
     K = (((*addr) >> (VSEBLOCKS_LOGDESC * 3)) & (VSEBLOCKS_LENS_LEN - 1));
@@ -679,7 +685,26 @@ inline const uint32_t *VSEncodingBlocks::decodeVS(uint32_t len,
       __vseblocks_zero32(out);
       out += __vseblocks_posszLens[K];
     }
-  } while (end > out);
+  }
+
+  /* Decode the remaining blocks one at a time without writing past end. */
+  while (end > out) {
+    const uint32_t desc = *addr++;
+    for (int shift = VSEBLOCKS_LOGDESC * 3; shift >= 0 && end > out;
+         shift -= VSEBLOCKS_LOGDESC) {
+      B = (desc >> (shift + VSEBLOCKS_LOGLEN)) & (VSEBLOCKS_LOGS_LEN - 1);
+      K = (desc >> shift) & (VSEBLOCKS_LENS_LEN - 1);
+      const uint32_t blklen =
+          B ? __vseblocks_possLens[K] : __vseblocks_posszLens[K];
+      if (B) {
+        memcpy(out, pblk[B], blklen * sizeof(uint32_t));
+        pblk[B] += blklen;
+      } else {
+        memset(out, 0, blklen * sizeof(uint32_t));
+      }
+      out += blklen;
+    }
+  }
   return addr;
 }
 
