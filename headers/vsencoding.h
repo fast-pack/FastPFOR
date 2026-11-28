@@ -207,13 +207,13 @@ inline uint32_t *VSEncoding::compute_OptPartition(uint32_t *seq, uint32_t len,
                         ? i - possLens[poss_sz - 1]
                         : 0;
 
-            if (i - j != possLens[l])
+            if (l >= static_cast<int>(poss_sz) || i - j != possLens[l])
               continue;
 
             if (i - j == possLens[l])
               l++;
           } else {
-            if (i - j == possLens[l])
+            if (l < static_cast<int>(poss_sz) && i - j == possLens[l])
               l++;
 
             if (i - j != posszLens[g])

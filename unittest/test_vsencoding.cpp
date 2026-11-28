@@ -40,9 +40,9 @@ static void verifyDecodeStaysInBounds(const std::vector<uint32_t> &in) {
 TEST(VSEncodingTest, DecodeDoesNotWritePastOutput) {
   verifyDecodeStaysInBounds({1, 2, 3, 4, 5});
 
-  // Keep inputs to 16 integers or fewer. Longer inputs make the encoder read
-  // past __vseblocks_possLens, which AddressSanitizer reports.
-  for (uint32_t length = 0; length <= 16; ++length) {
+  // Up to 300 integers span many blocks and several descriptor words. From 17
+  // integers on, the encoder used to read past __vseblocks_possLens.
+  for (uint32_t length = 0; length <= 300; ++length) {
     std::vector<uint32_t> increasing(length);
     for (uint32_t i = 0; i < length; ++i) {
       increasing[i] = i * 7;
